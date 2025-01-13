@@ -1,0 +1,155 @@
+function createQuizFromJSON() {
+  // JSON data for the quiz questions
+  var quizData = [
+    {
+      "type": "multiple choice",
+      "question": "Which of the following is true about glycolysis?",
+      "options": [
+        "It requires oxygen to produce ATP.",
+        "It generates more ATP than oxidative phosphorylation.",
+        "It can proceed without oxygen, producing lactate as a byproduct.",
+        "It converts glucose to pyruvate, which is used exclusively in the TCA cycle."
+      ],
+      "correct_answer": "It can proceed without oxygen, producing lactate as a byproduct."
+    },
+    {
+      "type": "multiple choice",
+      "question": "Which of the following statements about oxidative phosphorylation is NOT true?",
+      "options": [
+        "It produces more ATP than glycolysis alone.",
+        "It occurs exclusively in the cytoplasm of the cell.",
+        "It requires oxygen as the final electron acceptor.",
+        "It generates ATP using a proton gradient across the inner mitochondrial membrane."
+      ],
+      "correct_answer": "It occurs exclusively in the cytoplasm of the cell."
+    },
+    {
+      "type": "multiple choice",
+      "question": "How is glycolysis measured in a Seahorse assay?",
+      "options": [
+        "ATP production rate (APR)",
+        "Oxygen Consumption Rate (OCR)",
+        "Extracellular Acidification Rate (ECAR)",
+        "Mitochondrial membrane potential (MMP)"
+      ],
+      "correct_answer": "Extracellular Acidification Rate (ECAR)"
+    },
+    {
+      "type": "multiple choice",
+      "question": "Which of the following best describes beta-oxidation in cellular metabolism?",
+      "options": [
+        "The synthesis of fatty acids from acetyl-CoA and NADPH.",
+        "The conversion of glucose into pyruvate in the cytoplasm.",
+        "The direct generation of ATP from amino acid metabolism.",
+        "The breakdown of fatty acids into acetyl-CoA for entry into the TCA cycle."
+      ],
+      "correct_answer": "The breakdown of fatty acids into acetyl-CoA for entry into the TCA cycle."
+    },
+    {
+      "type": "multiple choice",
+      "question": "Which metabolic pathway is used by inflammatory immune cells to quickly generate energy?",
+      "options": [
+        "TCA cycle",
+        "Aerobic glycolysis",
+        "Fatty acid oxidation",
+        "Amino acid metabolism"
+      ],
+      "correct_answer": "Aerobic glycolysis"
+    },
+    {
+      "type": "multiple choice",
+      "question": "How does mTOR activation affect an immune cell's metabolism?",
+      "options": [
+        "Inhibits nutrient uptake",
+        "Promotes lipid oxidation",
+        "Reduces protein synthesis",
+        "Stimulates aerobic glycolysis"
+      ],
+      "correct_answer": "Stimulates aerobic glycolysis"
+    },
+    {
+      "type": "multiple choice",
+      "question": "What role do HIFs play in cellular metabolism?",
+      "options": [
+        "Inhibit glycolysis under oxygen-rich conditions",
+        "Increase ATP production through oxidative phosphorylation",
+        "Mediate effects of hypoxia and promote anaerobic glycolysis",
+        "Stimulate fatty acid synthesis in response to glucose availability"
+      ],
+      "correct_answer": "Mediate effects of hypoxia and promote anaerobic glycolysis"
+    },
+    {
+      "type": "multiple choice",
+      "question": "Why is visceral fat more closely linked to immune-related metabolic diseases?",
+      "options": [
+        "It enhances overall metabolic rate.",
+        "It primarily functions as an energy storage site.",
+        "It has a higher resistance to hormone signaling.",
+        "It recruits and activates pro-inflammatory immune cells."
+      ],
+      "correct_answer": "It recruits and activates pro-inflammatory immune cells."
+    },
+    {
+      "type": "multiple choice",
+      "question": "How can obesity lead to the development of type II diabetes?",
+      "options": [
+        "By decreasing fat storage capacity in muscles.",
+        "By boosting the immune response to infections.",
+        "By increasing glucose absorption in the intestines.",
+        "By disrupting insulin signaling through proinflammatory molecules."
+      ],
+      "correct_answer": "By disrupting insulin signaling through proinflammatory molecules."
+    },
+    {
+      "type": "multiple choice",
+      "question": "Which statement is true regarding the effect of obesity on cancer risk?",
+      "options": [
+        "Obesity suppresses anti-tumor natural killer (NK) cells.",
+        "Obesity exclusively enhances anti-tumor immune responses.",
+        "Obesity reduces the efficiency of lipid metabolism in cancer cells.",
+        "Increased visceral adiposity correlates with reduced risks of cancer."
+      ],
+      "correct_answer": "Obesity suppresses anti-tumor natural killer (NK) cells."
+    }
+  ];
+  
+  // Create a new Google Form with the specified title
+  var form = FormApp.create('SCBM431 Quiz: Immunometabolism');
+
+  // Set the form as a quiz
+  form.setIsQuiz(true);
+
+  // Add "Full Name" question
+  var nameItem = form.addTextItem();
+  nameItem.setTitle('Full Name').setRequired(true);
+
+  // Add "Student ID" question
+  var studentIdItem = form.addTextItem();
+  studentIdItem.setTitle('Student ID').setRequired(true);
+
+  // Loop through the quiz data and add questions to the form
+  quizData.forEach(function(item) {
+    if (item.type === 'multiple choice') {
+      var question = form.addMultipleChoiceItem();
+      question.setTitle(item.question);
+      var choices = item.options.map(function(option) {
+        return question.createChoice(option, option === item.correct_answer);
+      });
+      question.setChoices(choices).setRequired(true);
+      
+      // Set the correct answer and points for the quiz
+      question.setPoints(1);
+      
+      // Create feedback objects for correct and incorrect answers
+      var correctFeedback = FormApp.createFeedback().setText('Correct!').build();
+      var incorrectFeedback = FormApp.createFeedback().setText('Incorrect. Please review the materials.').build();
+      
+      // Apply feedback to the question
+      question.setFeedbackForCorrect(correctFeedback);
+      question.setFeedbackForIncorrect(incorrectFeedback);
+    }
+  });
+
+  // Log the URL of the created form
+  Logger.log('Quiz created: ' + form.getEditUrl());
+}
